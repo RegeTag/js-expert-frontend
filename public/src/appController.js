@@ -19,13 +19,12 @@ export default class AppController{
       onDropHandler: this.onFileChange.bind(this)
     });
     
-    
-    
     await this.updateCurrentFiles();
+    
+    this.viewManager.configureDownloadButtons();
   } 
 
   async onProgress({processedAlready, filename}){
-    console.debug({processedAlready, filename});
     const file = this.uploadingFiles.get(filename);
 
     const processedAlreadyPercent = Math.ceil(processedAlready / file.size * 100);

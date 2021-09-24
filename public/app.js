@@ -7,7 +7,7 @@ const API_URL = "https://localhost:3000";
 
 const connectionManager = new ConnectionManager({apiUrl: API_URL});
 const dragAndDropManager = new DragAndDropManager();
-const viewManager = new ViewManager();
+const viewManager = new ViewManager(connectionManager);
 
 
 const appController = new AppController({connectionManager, viewManager, dragAndDropManager});
@@ -15,7 +15,7 @@ const appController = new AppController({connectionManager, viewManager, dragAnd
 
 try {
   await appController.initialize();
-
+  
 } catch (error) {
   console.error("Error on initializing!",error);
 } 

@@ -25,8 +25,12 @@ export default class ConnectionManager{
       method:"POST",
       body:formData
     });
-
+    
     return response.json();
+  }
+  
+  downloadFile(fileName){
+    window.location.href =  `${this.apiUrl}/download?file=${fileName}`;
   }
   
   async currentFiles(){

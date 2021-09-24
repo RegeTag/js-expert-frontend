@@ -1,5 +1,5 @@
 export default class ViewManager{
-  constructor(){
+  constructor(connectionManager){
     this.tbody = document.getElementById("tbody");
     this.newFileButton = document.getElementById("newFileButton");
     this.fileElem = document.getElementById("fileElem");
@@ -7,6 +7,8 @@ export default class ViewManager{
     this.progressBar = document.getElementById("progress-bar");
     this.output = document.getElementById("output");
     this.modalInstance = {};
+
+    this.connectionManager = connectionManager;
 
     this.formatter = new Intl.DateTimeFormat("pt", { 
       locale:"pt-bt",
@@ -52,6 +54,16 @@ export default class ViewManager{
     this.newFileButton.onclick = () => this.fileElem.click();
   }
 
+  configureDownloadButtons(){
+    const filesTotal = Math.floor(this.tbody.childNodes.length / 2);
+
+    for( let index = 0; index < filesTotal; index++){
+      const button = document.getElementById("downloadButton" + index);
+      
+      button.onclick = () => this.connectionManager.downloadFile(button.value);
+    }
+  }
+
   getIcon(file){
     const icon = file.match(/\.mp4/i) ? "movie" 
       : file.match(/\.jp|.png/i) ? "image" 
@@ -72,7 +84,7 @@ export default class ViewManager{
   }
 
   updateCurrentFiles(files){
-    const filesList = files.map( item => {
+    const filesList = files.map( (item, index) => {
 
       const fileHTML = `
         <tr>
@@ -80,6 +92,15 @@ export default class ViewManager{
           <td>${item.owner}</td>
           <td>${this.formatter.format(new Date(item.lastModified))}</td>
           <td>${item.size}</td>
+          <td>
+            <button 
+              class="waves-effect waves-light btn btn-flat downloadButton" 
+              id="downloadButton${index}"
+              value="${item.file}"
+            >
+              <i class="material-icons">download</i>
+            </button>
+          </td>
         </tr>
       `;
       
